@@ -7,11 +7,12 @@
 project -> Properties -> Targeted Runtimes -> Apache Tomcat v9 -> Apply and close 
 
 # Run
-1. Run as -> maven install (optional)
-2. Run as -> Run on Server
+1. Maven ->　Update Project Configuration
+2. Run as -> maven install (optional)
+3. Run as -> Run on Server
 
 # Test web page (just test only)
 http://localhost:8080/CD1/
 
-# May need this sometime if you do something special and made Eclipse angry
-Maven ->　Update Project Configuration
+pull everytime you code and push after it to avoid conflict
+
