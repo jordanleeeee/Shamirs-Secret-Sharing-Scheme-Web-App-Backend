@@ -12,3 +12,6 @@ project -> Properties -> Targeted Runtimes -> Apache Tomcat v9 -> Apply and clos
 
 # Test web page (just test only)
 http://localhost:8080/CD1/
+
+# May need this sometime if you do something special and made Eclipse angry
+Maven ->　Update Project Configuration
