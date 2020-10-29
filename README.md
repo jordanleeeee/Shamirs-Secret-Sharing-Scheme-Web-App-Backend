@@ -21,3 +21,8 @@
  
 Important: pull before you code and push after it to avoid conflict; Avoid push to master directly..
 
+# Others
+1. I can successfully support text encryption and recovery, even with special symbols
+2. I can successfully support image encryption and recovery, but I cannot open the encrypted shares...
+	2.1 I tried to output real byte array of the encrypted shares and produce something call jpg, but still cannot open >.<
+	2.2 So I simply use the same share string as the text one (it is not a byte array now), leave to disscuss later..

@@ -8,7 +8,7 @@ import java.util.Random;
 // ssss over GF(2^n)
 public class MakeSharePlus {
 
-	final String secret;
+	final byte[] secret;
 	final int t;
 	final int n;
 	final int n_;
@@ -20,7 +20,7 @@ public class MakeSharePlus {
 	 * @param n      number of shares
 	 * @param n_     value of n of GF(2^n)
 	 */
-	public MakeSharePlus(String secret, int t, int n, int n_) {
+	public MakeSharePlus(byte[] secret, int t, int n, int n_) {
 		if (t > n) {
 			throw new IllegalStateException("n must be >= t in order to recover the secret");
 		}
@@ -35,13 +35,12 @@ public class MakeSharePlus {
 		Random random = new Random();
 		int[] coefficient = new int[t];
 		String[] shares = new String[n];
-		byte[] secretByte = secret.getBytes();
-		int [] temp=new int[secretByte.length];
+		int [] temp=new int[secret.length];
 
 		//byte to unsinged int, this is very important, don't remove
-		for(int i=0;i<secretByte.length;i++)
+		for(int i=0;i<secret.length;i++)
 		{
-			temp[i]=secretByte[i]& 0xff;
+			temp[i]=secret[i]& 0xff;
 //			System.out.println("temp[i]: "+temp[i]+"secretByte[i]: "+secretByte[i]);
 		}
 		for (int i = 0; i < n; i++) {

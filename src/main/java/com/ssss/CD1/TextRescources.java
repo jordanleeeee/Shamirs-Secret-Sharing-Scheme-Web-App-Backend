@@ -41,7 +41,9 @@ public class TextRescources {
 		int t=(int) map.get("t");
 		
 		System.out.println("Secret: " + secret+ "\n");
-		MakeSharePlus makeSharePlus = new MakeSharePlus(secret, t, n, 8);
+		byte[] secretByte = secret.getBytes();
+		MakeSharePlus makeSharePlus = new MakeSharePlus(secretByte, t, n, 8);
+		
 		String[] shares = makeSharePlus.constructPoints();
 		System.out.println("points(shares): " + Arrays.deepToString(shares) + "\n");
 
