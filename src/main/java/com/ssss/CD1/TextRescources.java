@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -20,6 +21,7 @@ import ssss.MakeSharePlus;
 import ssss.RecoverSecretPlus;
 
 @Path("TextApi")
+@PermitAll
 public class TextRescources {
 	
 	@POST
@@ -37,8 +39,8 @@ public class TextRescources {
 //		int t = 3;
 		
 		String secret=(String) map.get("secret");
-		int n=(int) map.get("n");
-		int t=(int) map.get("t");
+		int n=(int) map.get("totalShare");
+		int t=(int) map.get("threshold");
 		
 		System.out.println("Secret: " + secret+ "\n");
 		byte[] secretByte = secret.getBytes();
@@ -62,8 +64,9 @@ public class TextRescources {
 	
 	@POST
 	@Path("/recovery/{t}")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getSecret ( @PathParam("t") int t,Map<String, Object> map){
+	public Response getSecret ( Map<String, Object> map,@PathParam("t") int t){
 		System.out.println("You are now in text recovery service");
 		System.out.println("t: "+t+"map content: "+map);
 		String []shares=new String[t];
@@ -71,6 +74,7 @@ public class TextRescources {
 		for(int i=0;i<t;i++)
 		{
 			shares[i]=(String) map.get("share"+i);
+			System.out.println(i+": "+shares[i]);
 		}
 
 		RecoverSecretPlus recoverSecretPlus = new RecoverSecretPlus(shares, t,8);

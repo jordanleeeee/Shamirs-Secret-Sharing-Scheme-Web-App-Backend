@@ -12,7 +12,7 @@
 1. Maven ->　Update Project Configuration
 2. Run as -> maven install (optional)
 3. Run as -> Run on Server
-
+4. Sometime you need to restart the Eclipse when you see error in .xml files. It is not my fault, but you treat it too rude and it crash (you make it angry now)
 
 # Test web page 
 1. Run our Angular frontend with this backend at the same time
