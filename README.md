@@ -19,7 +19,7 @@
 2. go to localhost8080 and play around
 3. if you cannot receive any result from backend, you may encounter problem(s) in the Eclipse/maven/tomcat/jdk configuration, see if we can solve together
  
-Important: pull before you code and push after it to avoid conflict; Avoid push to master directly..
+- ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `Important: pull before you code and push after it to avoid conflict; Avoid push to master directly..` 
 
 # Others
 1. I can successfully support text encryption and recovery, even with special symbols
