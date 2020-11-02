@@ -47,25 +47,25 @@ public class ImageResources {
 			String[] shares = makeSharePlus.constructPoints();
 			System.out.println("points(shares): " + Arrays.deepToString(shares) + "\n");
 
-			// I still cannot open the image even I do this>.<
-//			int numOfByte = shares[0].split("-").length;
-//			byte[][] secretEncrypt = new byte[n][numOfByte - 1];// 1st is not share
-//			String[][] sharePerByte = new String[n][numOfByte];
-//			for (int i = 0; i < n; i++) {
-//				sharePerByte[i] = shares[i].split("-");
-//				System.out.println( Arrays.deepToString(sharePerByte[i]));
-//			}
-//			
-//			for (int k = 1; k < numOfByte; k++) {
-//				for (int i = 0; i < n; i++) {
-//					secretEncrypt[i][k-1] = (byte)(Integer.parseInt(sharePerByte[i][k]));
-//				}
-//			}
+			// this is temporary only, because I am lazy and want to test only, you should add another function is SSSS to do this, not here. But leave to later.   
+			int numOfByte = shares[0].split("-").length;
+			byte[][] secretEncrypt = new byte[n][numOfByte - 1];// 1st is not share
+			String[][] sharePerByte = new String[n][numOfByte];
+			for (int i = 0; i < n; i++) {
+				sharePerByte[i] = shares[i].split("-");
+				System.out.println( Arrays.deepToString(sharePerByte[i]));
+			}
+			
+			for (int k = 1; k < numOfByte; k++) {
+				for (int i = 0; i < n; i++) {
+					secretEncrypt[i][k-1] = (byte)(Integer.parseInt(sharePerByte[i][k]));
+				}
+			}
 
 			Map<String, Object> result = new HashMap<String, Object>();
 			for (int i = 0; i < n; i++) {
-//				result.put("share"+i,Base64.getEncoder().encodeToString(secretEncrypt[i]) );
-				result.put("share" + i, shares[i]);
+				result.put("share"+i,Base64.getEncoder().encodeToString(secretEncrypt[i]) );
+//				result.put("share" + i, shares[i]);
 			}
 			System.out.print(result);
 			Response reply = Response.ok(result).build();
@@ -84,13 +84,35 @@ public class ImageResources {
 	@Consumes({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getSecret(@PathParam("t") int t, Map<String, Object> map) {
-		System.out.println("You are now in text recovery service");
+		System.out.println("\n\nYou are now in image recovery service");
 		System.out.println("t: " + t + "map content: " + map);
 		String[] shares = new String[t];
+		byte[][] charBuffer = new byte[t][((String)map.get("share0" )).length()+1];//+1 for the share number, I only return the encrypted content of the image without the share number
 
 		for (int i = 0; i < t; i++) {
-			shares[i] = (String) map.get("share" + i);
+//			shares[i] = (String) map.get("share" + i);
+			
+			
+		//below is temporary only, we should make a new function for image recovery in SSSS instead of making - - - format here (I am lazy and want to test it works or not only, leave to you)	
+			charBuffer[i]=Base64.getDecoder().decode((String) map.get("share" + i));
+			shares[i]=(i+1)+"-";
+			for(int k=0;k<charBuffer[0].length;k++)
+			{
+				shares[i]+=(((int)charBuffer[i][k])&0xff)+"-";
+			}
+			System.out.print(shares[i]);
+//			shares[i]="";
+//			for(int k=0;k<stringBuffer.length();k++)
+//			{
+//				shares[i]+=((int)(stringBuffer.charAt(k)))+"-";
+//			}
+//			System.out.println("share: "+i+" "+shares[i]);
+//			
+//			
 		}
+		
+		
+		
 
 		RecoverSecretPlus recoverSecretPlus = new RecoverSecretPlus(shares, t, 8);
 
