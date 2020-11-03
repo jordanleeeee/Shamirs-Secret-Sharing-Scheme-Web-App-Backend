@@ -47,18 +47,18 @@ public class ImageResources {
 			String[] shares = makeSharePlus.constructPoints();
 			System.out.println("points(shares): " + Arrays.deepToString(shares) + "\n");
 
-			// this is temporary only, because I am lazy and want to test only, you should add another function is SSSS to do this, not here. But leave to later.   
+			// this is temporary only, because I am lazy and want to test only, you should add another function is SSSS to do this, not here. But leave to later/but still O(n) anyway.   
 			int numOfByte = shares[0].split("-").length;
-			byte[][] secretEncrypt = new byte[n][numOfByte - 1];// 1st is not share
+			byte[][] secretEncrypt = new byte[n][numOfByte ];// 1st is not share
 			String[][] sharePerByte = new String[n][numOfByte];
 			for (int i = 0; i < n; i++) {
 				sharePerByte[i] = shares[i].split("-");
 				System.out.println( Arrays.deepToString(sharePerByte[i]));
 			}
 			
-			for (int k = 1; k < numOfByte; k++) {
+			for (int k = 0; k < numOfByte; k++) {
 				for (int i = 0; i < n; i++) {
-					secretEncrypt[i][k-1] = (byte)(Integer.parseInt(sharePerByte[i][k]));
+					secretEncrypt[i][k] = (byte)(Integer.parseInt(sharePerByte[i][k]));
 				}
 			}
 
@@ -87,15 +87,15 @@ public class ImageResources {
 		System.out.println("\n\nYou are now in image recovery service");
 		System.out.println("t: " + t + "map content: " + map);
 		String[] shares = new String[t];
-		byte[][] charBuffer = new byte[t][((String)map.get("share0" )).length()+1];//+1 for the share number, I only return the encrypted content of the image without the share number
+		byte[][] charBuffer = new byte[t][((String)map.get("share0" )).length()];
 
 		for (int i = 0; i < t; i++) {
 //			shares[i] = (String) map.get("share" + i);
 			
 			
-		//below is temporary only, we should make a new function for image recovery in SSSS instead of making - - - format here (I am lazy and want to test it works or not only, leave to you)	
+			// this is temporary only, because I am lazy and want to test only, you should add another function is SSSS to do this, not here. But leave to later/but still O(n) anyway. 
 			charBuffer[i]=Base64.getDecoder().decode((String) map.get("share" + i));
-			shares[i]=(i+1)+"-";
+			shares[i]="";
 			for(int k=0;k<charBuffer[0].length;k++)
 			{
 				shares[i]+=(((int)charBuffer[i][k])&0xff)+"-";
