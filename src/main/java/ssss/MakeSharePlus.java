@@ -64,6 +64,40 @@ public class MakeSharePlus {
 		}
 		return shares;
 	}
+	
+	public byte[][] constructPointsEX() {
+		Random random = new Random();
+		int[] coefficient = new int[t];
+		byte[][] shares = new byte[n][secret.length+1];//1 for the x
+		int [] temp=new int[secret.length];
+
+
+		//byte to unsinged int, this is very important, don't remove
+		for(int i=0;i<secret.length;i++)
+		{
+			temp[i]=secret[i]& 0xff;
+//			System.out.println("temp[i]: "+temp[i]+"secretByte[i]: "+secretByte[i]);
+		}
+		for (int i = 0; i < n; i++) {
+			shares[i][0] = (byte)(i + 1) ;
+		}
+
+		for (int k = 0; k < secret.length; k++) {
+
+			int eachByte = secret[k]& 0xff;
+			coefficient[0] = eachByte;
+			for (int i = 1; i < coefficient.length; i++) {
+				coefficient[i] = random.nextInt(limit);
+			}
+//			System.out.println("coefficient of polynomial: " + Arrays.toString(coefficient));
+
+			for (int i = 0; i < shares.length; i++) {
+				shares[i][k+1] = (byte)getYCoord(i + 1, coefficient);
+
+			}
+		}
+		return shares;
+	}
 
 	private int getYCoord(int x, int[] coefficient) {
 		// y = f(x), input y, return x

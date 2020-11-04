@@ -64,5 +64,46 @@ public class RecoverSecretPlus {
 
 		return secret;
 	}
+	
+	public byte[] getSecretEX() {
+		if (shares.length < t) {
+			throw new IllegalStateException("not enough share to recover the secret");
+		}
+
+		int result=0 ;
+
+		int numOfByte = shares[0].length();
+		System.out.println(numOfByte);
+		byte[] secret = new byte[numOfByte - 1];// 1st is not share
+//		String[][] sharePerByte = new String[t][numOfByte];
+//		for (int i = 0; i < t; i++) {
+//			sharePerByte[i] = shares[i].split("-");
+//
+//		}
+
+		for (int k = 1; k < numOfByte; k++) {
+			result = 0;
+			for (int i = 0; i < t; i++) {
+
+//				int temp = Integer.parseInt(sharePerByte[i][k]); // temp = Y(i)
+				int temp = (((int)shares[i].charAt(k))&0xff); // temp = Y(i)
+				for (int j = 0; j < t; j++) {
+					if (i != j) {
+
+						int fraction = FiniteField.divide(((int)(shares[j].charAt(0))), FiniteField
+								.minus(((int)(shares[j].charAt(0))), ((int)(shares[i].charAt(0)))), n_);
+						temp = FiniteField.multiply(temp, fraction, n_); // temp *= fraction
+					}
+				}
+				result = FiniteField.add(result, temp); // result += temp
+
+			}
+			secret[k-1] = (byte) ((char) (result));
+		
+		}
+
+
+		return secret;
+	}
 
 }
