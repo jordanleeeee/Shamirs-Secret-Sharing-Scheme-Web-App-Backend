@@ -7,7 +7,8 @@ import java.util.Random;
 
 // ssss over GF(2^n)
 public class MakeSharePlus {
-
+	
+	static final FiniteField finiteField = FiniteField.getInstance();
 	final byte[] secret;
 	final int t;
 	final int n;
@@ -104,8 +105,8 @@ public class MakeSharePlus {
 		int val = 1;
 		int result = 0;
 		for (int coef : coefficient) {
-			result = FiniteField.add(result, FiniteField.multiply(coef, val, n_)); // result += coef * x
-			val = FiniteField.multiply(val, x, n_); // val *= x
+			result = finiteField.add(result, finiteField.multiply(coef, val)); // result += coef * x
+			val = finiteField.multiply(val, x); // val *= x
 		}
 		return result;
 	}
