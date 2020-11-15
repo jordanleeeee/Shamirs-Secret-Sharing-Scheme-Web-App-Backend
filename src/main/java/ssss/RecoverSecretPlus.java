@@ -7,6 +7,7 @@ import finiteField.FiniteField;
 
 public class RecoverSecretPlus {
 
+	static final FiniteField finiteField = FiniteField.getInstance();
 	final String[] shares;
 	final int t;
 	final int n_;
@@ -49,12 +50,12 @@ public class RecoverSecretPlus {
 				for (int j = 0; j < t; j++) {
 					if (i != j) {
 
-						int fraction = FiniteField.divide(Integer.parseInt(sharePerByte[j][0]), FiniteField
-								.minus(Integer.parseInt(sharePerByte[j][0]), Integer.parseInt(sharePerByte[i][0])), n_);
-						temp = FiniteField.multiply(temp, fraction, n_); // temp *= fraction
+						int fraction = finiteField.divide(Integer.parseInt(sharePerByte[j][0]), finiteField
+								.minus(Integer.parseInt(sharePerByte[j][0]), Integer.parseInt(sharePerByte[i][0])));
+						temp = finiteField.multiply(temp, fraction); // temp *= fraction
 					}
 				}
-				result = FiniteField.add(result, temp); // result += temp
+				result = finiteField.add(result, temp); // result += temp
 
 			}
 			secret[k-1] = (byte) ((char) (result));
@@ -90,12 +91,12 @@ public class RecoverSecretPlus {
 				for (int j = 0; j < t; j++) {
 					if (i != j) {
 
-						int fraction = FiniteField.divide(((int)(shares[j].charAt(0))), FiniteField
-								.minus(((int)(shares[j].charAt(0))), ((int)(shares[i].charAt(0)))), n_);
-						temp = FiniteField.multiply(temp, fraction, n_); // temp *= fraction
+						int fraction = finiteField.divide(((int)(shares[j].charAt(0))), finiteField
+								.minus(((int)(shares[j].charAt(0))), ((int)(shares[i].charAt(0)))));
+						temp = finiteField.multiply(temp, fraction); // temp *= fraction
 					}
 				}
-				result = FiniteField.add(result, temp); // result += temp
+				result = finiteField.add(result, temp); // result += temp
 
 			}
 			secret[k-1] = (byte) ((char) (result));
