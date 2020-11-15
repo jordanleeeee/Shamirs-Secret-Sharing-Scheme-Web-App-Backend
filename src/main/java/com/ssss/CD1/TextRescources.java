@@ -2,6 +2,7 @@ package com.ssss.CD1;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,14 +47,14 @@ public class TextRescources {
 		byte[] secretByte = secret.getBytes();
 		MakeSharePlus makeSharePlus = new MakeSharePlus(secretByte, t, n, 8);
 		
-		String[] shares = makeSharePlus.constructPoints();
+		byte[][] shares = makeSharePlus.constructPointsEX();//we dont need to read the share in screen anymore as prof ask us to make it downloadable, so use EX one
 		System.out.println("points(shares): " + Arrays.deepToString(shares) + "\n");
 
 		
 		Map<String, Object> result = new HashMap<String,Object>();
 		for(int i=0;i<n;i++)
 		{
-			result.put("share"+i,shares[i] );
+			result.put("share"+i,Base64.getEncoder().encodeToString(shares[i]));
 		}
 		System.out.print(result);
 		Response reply = Response.ok(result).build();
@@ -70,16 +71,24 @@ public class TextRescources {
 		System.out.println("You are now in text recovery service");
 		System.out.println("t: "+t+"map content: "+map);
 		String []shares=new String[t];
-		
-		for(int i=0;i<t;i++)
+		for (int i = 0; i < t; i++)
 		{
-			shares[i]=(String) map.get("share"+i);
-			System.out.println(i+": "+shares[i]);
+			shares[i]="";
+			byte []temp = Base64.getDecoder().decode((String) map.get("share" + i));
+//			System.out.println("temp"+temp.length);
+			
+			//below is necessary as the image may contain null so new String cannot use 
+			for(int k=0;k<temp.length;k++)
+			{
+				shares[i]+=(char)temp[k];
+			}
+//			System.out.println("shares[i]"+shares[i].length());
+
 		}
 
 		RecoverSecretPlus recoverSecretPlus = new RecoverSecretPlus(shares, t,8);
 		
-		String response=new String(recoverSecretPlus.getSecret(), StandardCharsets.UTF_8);
+		String response=new String(recoverSecretPlus.getSecretEX(), StandardCharsets.UTF_8);//use EX one after meeting with prof
 		System.out.println("Recovery Result: " + response);
 		
 		Map<String, Object> result = new HashMap<String,Object>();
