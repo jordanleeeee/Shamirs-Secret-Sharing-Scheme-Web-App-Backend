@@ -48,7 +48,7 @@ public class ImageResources {
 //			String[] shares = makeSharePlus.constructPoints();
 
 			byte[][] shares = makeSharePlus.constructPointsEX();
-			System.out.println("points(shares): " + Arrays.deepToString(shares) + "\n");
+//			System.out.println("points(shares): " + Arrays.deepToString(shares) + "\n");
 
 //			// this is temporary only, because I am lazy and want to test only, you should add another function is SSSS to do this, not here. But leave to later/but still O(n) anyway.   
 //			int numOfByte = shares[0].split("-").length;
@@ -67,11 +67,11 @@ public class ImageResources {
 
 			Map<String, Object> result = new HashMap<String, Object>();
 			for (int i = 0; i < n; i++) {
-				System.out.println(shares[i]);
+//				System.out.println(shares[i]);
 				result.put("share" + i, Base64.getEncoder().encodeToString(shares[i]));
 //				result.put("share" + i, shares[i]);
 			}
-			System.out.print(result);
+//			System.out.print(result);
 			Response reply = Response.ok(result).build();
 			return reply;
 
@@ -88,8 +88,8 @@ public class ImageResources {
 	@Consumes({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getSecret(@PathParam("t") int t, Map<String, Object> map) {
-		System.out.println("\n\nYou are now in image recovery service");
-		System.out.println("t: " + t + "map content: " + map);
+		System.out.println("\n\nYou are now in image/zip recovery service");
+//		System.out.println("t: " + t + "map content: " + map);
 		String[] shares = new String[t];
 		int numOfByte=Base64.getDecoder().decode((String) map.get("share" + 0)).length;
 		for (int i = 0; i < t; i++)
@@ -126,11 +126,11 @@ public class ImageResources {
 		RecoverSecretPlus recoverSecretPlus = new RecoverSecretPlus(shares, t, 8);
 
 		byte[] response = recoverSecretPlus.getSecretEX();
-		System.out.println("Recovery Result: " + response);
+//		System.out.println("Recovery Result: " + response);
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("secret", response);
-		System.out.print(result);
+//		System.out.print(result);
 		Response reply = Response.ok(result).build();
 		return reply;
 	}
