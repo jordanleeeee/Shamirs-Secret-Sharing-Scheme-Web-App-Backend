@@ -208,7 +208,7 @@ public class ImageResources {
 		int i = 0;
 //		int x=30;
 //		int y=30;
-		BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_ARGB); // +1 to save x, I know it
+		BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB ); // +1 to save x, I know it
 																					// duplicated the space
 
 		for (int height = 0; height < y; height++) {
