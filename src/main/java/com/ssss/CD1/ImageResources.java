@@ -1,5 +1,10 @@
 package com.ssss.CD1;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.WritableRaster;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -9,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.security.PermitAll;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -68,7 +74,15 @@ public class ImageResources {
 			Map<String, Object> result = new HashMap<String, Object>();
 			for (int i = 0; i < n; i++) {
 //				System.out.println(shares[i]);
-				result.put("share" + i, Base64.getEncoder().encodeToString(shares[i]));
+//				byte[] tempReuslt = (shares[i]);
+//				System.out.println("tempReuslt " + tempReuslt.length + ": ");
+//				for (int pp = 0; pp < tempReuslt.length; pp++) {
+//					System.out.print((int) tempReuslt[pp] + " ");
+//				}
+
+
+
+				result.put("share" + i, Base64.getEncoder().encodeToString(drawImage(shares[i])));
 //				result.put("share" + i, shares[i]);
 			}
 //			System.out.print(result);
@@ -88,21 +102,62 @@ public class ImageResources {
 	@Consumes({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getSecret(@PathParam("t") int t, Map<String, Object> map) {
-		System.out.println("\n\nYou are now in image/zip recovery service");
+		System.out.println("\n\nYou are now in image recovery service");
 //		System.out.println("t: " + t + "map content: " + map);
 		String[] shares = new String[t];
-		int numOfByte=Base64.getDecoder().decode((String) map.get("share" + 0)).length;
-		for (int i = 0; i < t; i++)
-		{
-			shares[i]="";
-			byte []temp = Base64.getDecoder().decode((String) map.get("share" + i));
+//		int numOfByte = Base64.getDecoder().decode((String) map.get("share" + 0)).length;
+		for (int i = 0; i < t; i++) {
+			shares[i] = "";
+//			byte[] temp = Base64.getDecoder().decode((String) map.get("share" + i));
 //			System.out.println("temp"+temp.length);
-			
-			//below is necessary as the image may contain null so new String cannot use 
-			for(int k=0;k<numOfByte;k++)
-			{
-				shares[i]+=(char)temp[k];
+
+//			System.out.println("Receive: ");
+			// below is necessary as the image may contain null so new String cannot use
+//			for (int k = 0; k < numOfByte; k++) {
+//				shares[i] += (char) temp[k];
+//
+//				System.out.print((int) ((char) temp[k]) + " ");
+//
+//			}
+
+			// reverse engineering
+			ByteArrayInputStream income = new ByteArrayInputStream(Base64.getDecoder().decode((String) map.get("share" + i)));
+			BufferedImage bufferedImage;
+			try {
+				bufferedImage = ImageIO.read(income);
+				int height = bufferedImage.getHeight();
+				int width = bufferedImage.getWidth();
+//
+//				System.out.println("width: " + width + " height: " + height);
+//				System.out.println();
+
+//				byte[] reverseResult = new byte[(width - 1) * (height - 1) + 1];
+//				int counter = 0;
+				for (int y = 0; y < height; y++){
+					for (int x = 0; x < width; x++) {
+						if (x == 0 && y == 0) {
+//							System.out.print(bufferedImage.getRGB(0, 0)+" ");
+							shares[i] += (char)bufferedImage.getRGB(0, 0);
+						} else if (x == 0 || y == 0) {
+							continue;
+						}
+						else {
+//							System.out.print(bufferedImage.getRGB(x, y)+" ");
+							shares[i] += (char) bufferedImage.getRGB(x, y);
+//							System.out.println((int)bufferedImage.getRGB(x, y)+ " ");
+						}
+
+					}
+				}
+
+//				System.out.println(shares[i]);
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+
+//			System.out.println();
 //			System.out.println("shares[i]"+shares[i].length());
 
 		}
@@ -133,6 +188,68 @@ public class ImageResources {
 //		System.out.print(result);
 		Response reply = Response.ok(result).build();
 		return reply;
+	}
+
+	// part of the idea for image drawing from
+	// https://dyclassroom.com/image-processing-project/how-to-create-a-random-pixel-image-in-java,
+	// by Yusuf Shakeel
+	byte[] drawImage(byte[] share) {
+//		byte[] trier = { 5, 6, 7, 18 };
+//		share = trier;
+//		System.out.println("the first one: " + (int) share[0]);
+//		System.out.println("the second one: " + (int) share[1]);
+//		System.out.println("the third one: " + (int) share[2]);
+		System.out.println("the length: " + share.length);
+		int[] roots = new int[2];
+		roots = closest_roots(share.length - 1);
+		int x = roots[0] + 1;
+		int y = roots[1] + 1;
+//		System.out.println("first root: " + x + " second root: " + y);
+		int i = 0;
+//		int x=30;
+//		int y=30;
+		BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_ARGB); // +1 to save x, I know it
+																					// duplicated the space
+
+		for (int height = 0; height < y; height++) {
+			for (int width = 0; width < x; width++) {
+//				System.out.println("width: "+width+" height: "+height);
+				if (width == 0 || height == 0) {
+					image.setRGB(width, height, (int) share[0]); // we waste the first column and row to store x, can be
+																	// improved latter, lazy now
+				} else {
+					image.setRGB(width, height, (int) share[++i]);
+//					System.out.print("x: "+width+" y: "+height+ " value: "+ image.getRGB(width, height));
+				}
+
+			}
+		}
+		ByteArrayOutputStream result = new ByteArrayOutputStream();
+		try {
+			ImageIO.write(image, "png", result);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result.toByteArray();
+	}
+
+	// find two closest roots for a given image size
+	int[] closest_roots(int length) {
+		int[] results = new int[2];
+		int first_num = (int) Math.ceil(Math.sqrt(length));
+		while (true) {
+
+			if (length % first_num == 0) {
+				results[0] = first_num;
+				results[1] = length / first_num;
+
+				return results;
+			} else {
+				first_num++;
+			}
+		}
+
 	}
 
 }
