@@ -122,11 +122,11 @@ public class ImageResources {
 
 			// reverse engineering
 			ByteArrayInputStream income = new ByteArrayInputStream(Base64.getDecoder().decode((String) map.get("share" + i)));
-			BufferedImage bufferedImage;
+			BufferedImage receivedImage;
 			try {
-				bufferedImage = ImageIO.read(income);
-				int height = bufferedImage.getHeight();
-				int width = bufferedImage.getWidth();
+				receivedImage = ImageIO.read(income);
+				int height = receivedImage.getHeight();
+				int width = receivedImage.getWidth();
 //
 //				System.out.println("width: " + width + " height: " + height);
 //				System.out.println();
@@ -137,13 +137,13 @@ public class ImageResources {
 					for (int x = 0; x < width; x++) {
 						if (x == 0 && y == 0) {
 //							System.out.print(bufferedImage.getRGB(0, 0)+" ");
-							shares[i] += (char)bufferedImage.getRGB(0, 0);
+							shares[i] += (char)receivedImage.getRGB(0, 0);
 						} else if (x == 0 || y == 0) {
 							continue;
 						}
 						else {
 //							System.out.print(bufferedImage.getRGB(x, y)+" ");
-							shares[i] += (char) bufferedImage.getRGB(x, y);
+							shares[i] += (char) receivedImage.getRGB(x, y);
 //							System.out.println((int)bufferedImage.getRGB(x, y)+ " ");
 						}
 
@@ -153,7 +153,7 @@ public class ImageResources {
 //				System.out.println(shares[i]);
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 
@@ -193,6 +193,9 @@ public class ImageResources {
 	// part of the idea for image drawing from
 	// https://dyclassroom.com/image-processing-project/how-to-create-a-random-pixel-image-in-java,
 	// by Yusuf Shakeel
+	// The size of the image we draw here is not the size of the original image, because we are using bytes and the original image is stored in bytes
+	// but the thing is that the original image doesnt sore a pixel in a byte, but much more,
+	// this will result our image product much smaller than the original image 
 	byte[] drawImage(byte[] share) {
 //		byte[] trier = { 5, 6, 7, 18 };
 //		share = trier;
@@ -228,13 +231,14 @@ public class ImageResources {
 		try {
 			ImageIO.write(image, "png", result);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		
 			e.printStackTrace();
 		}
 		return result.toByteArray();
 	}
 
 	// find two closest roots for a given image size
+	// it cannot provide a perfect square always, as we need to find two value that value 1 x value = the length, not always get a good solution, especially for a prime value..
 	int[] closest_roots(int length) {
 		int[] results = new int[2];
 		int first_num = (int) Math.ceil(Math.sqrt(length));
