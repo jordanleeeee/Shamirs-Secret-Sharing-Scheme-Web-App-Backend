@@ -136,13 +136,13 @@ public class ImageResources {
 				for (int y = 0; y < height; y++){
 					for (int x = 0; x < width; x++) {
 						if (x == 0 && y == 0) {
-//							System.out.print(bufferedImage.getRGB(0, 0)+" ");
+//							System.out.print(receivedImage.getRGB(0, 0)+" ");
 							shares[i] += (char)receivedImage.getRGB(0, 0);
 						} else if (x == 0 || y == 0) {
 							continue;
 						}
 						else {
-//							System.out.print(bufferedImage.getRGB(x, y)+" ");
+//							System.out.print(receivedImage.getRGB(x, y)+" ");
 							shares[i] += (char) receivedImage.getRGB(x, y);
 //							System.out.println((int)bufferedImage.getRGB(x, y)+ " ");
 						}
@@ -229,7 +229,7 @@ public class ImageResources {
 		}
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		try {
-			ImageIO.write(image, "png", result);
+			ImageIO.write(image, "png", result); //we stick to png as png is a lossless format although the size is big, but is the most suitable for our project to store bytes
 		} catch (IOException e) {
 		
 			e.printStackTrace();
