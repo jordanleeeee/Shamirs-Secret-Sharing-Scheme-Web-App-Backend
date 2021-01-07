@@ -45,9 +45,9 @@ public class ImageResources {
 
 		try {
 			System.out.println("You are now in Image encryption service");
-			byte[] temp = IOUtils.toByteArray(fileInputStream);
+			byte[] secretByte = IOUtils.toByteArray(fileInputStream);
 
-			byte[] secretByte = Arrays.copyOfRange(temp, 0, temp.length - 1);
+//			byte[] secretByte = Arrays.copyOfRange(temp, 0, temp.length - 1);
 //			System.out.println("secret: "+Arrays.toString(secretByte));
 			MakeSharePlus makeSharePlus = new MakeSharePlus(secretByte, t, n, 8);
 
