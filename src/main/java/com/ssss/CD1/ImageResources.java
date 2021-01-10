@@ -80,8 +80,6 @@ public class ImageResources {
 //					System.out.print((int) tempReuslt[pp] + " ");
 //				}
 
-
-
 				result.put("share" + i, Base64.getEncoder().encodeToString(drawImage(shares[i])));
 //				result.put("share" + i, shares[i]);
 			}
@@ -121,7 +119,8 @@ public class ImageResources {
 //			}
 
 			// reverse engineering
-			ByteArrayInputStream income = new ByteArrayInputStream(Base64.getDecoder().decode((String) map.get("share" + i)));
+			ByteArrayInputStream income = new ByteArrayInputStream(
+					Base64.getDecoder().decode((String) map.get("share" + i)));
 			BufferedImage receivedImage;
 			try {
 				receivedImage = ImageIO.read(income);
@@ -133,19 +132,21 @@ public class ImageResources {
 
 //				byte[] reverseResult = new byte[(width - 1) * (height - 1) + 1];
 //				int counter = 0;
-				for (int y = 0; y < height; y++){
+				for (int y = 0; y < height; y++) {
 					for (int x = 0; x < width; x++) {
-						if (x == 0 && y == 0) {
-//							System.out.print(receivedImage.getRGB(0, 0)+" ");
-							shares[i] += (char)receivedImage.getRGB(0, 0);
-						} else if (x == 0 || y == 0) {
-							continue;
-						}
-						else {
-//							System.out.print(receivedImage.getRGB(x, y)+" ");
-							shares[i] += (char) receivedImage.getRGB(x, y);
-//							System.out.println((int)bufferedImage.getRGB(x, y)+ " ");
-						}
+//						if (x == 0 && y == 0) {
+////							System.out.print(receivedImage.getRGB(0, 0)+" ");
+//							shares[i] += (char)receivedImage.getRGB(0, 0);
+//						} else if (x == 0 || y == 0) {
+//							continue;
+//						}
+//						else {
+////							System.out.print(receivedImage.getRGB(x, y)+" ");
+//							shares[i] += (char) receivedImage.getRGB(x, y);
+////							System.out.println((int)bufferedImage.getRGB(x, y)+ " ");
+//						}
+						// we can now use only one pixel to store x, no need above line anymore
+						shares[i] += (char) receivedImage.getRGB(x, y);
 
 					}
 				}
@@ -153,7 +154,7 @@ public class ImageResources {
 //				System.out.println(shares[i]);
 
 			} catch (IOException e) {
-				
+
 				e.printStackTrace();
 			}
 
@@ -193,9 +194,15 @@ public class ImageResources {
 	// part of the idea for image drawing from
 	// https://dyclassroom.com/image-processing-project/how-to-create-a-random-pixel-image-in-java,
 	// by Yusuf Shakeel
-	// The size of the image we draw here is not the size of the original image, because we are using bytes and the original image is stored in bytes
-	// but the thing is that the original image doesnt sore a pixel in a byte, but much more,
-	// this will result our image product much smaller than the original image 
+	// The size of the image we draw here is not the size of the original image,
+	// because we are using bytes as the original image is stored in bytes
+	// but the thing is that the original image doesn't store a pixel in a byte, but usually
+	// much more,
+	// this will result our image product much smaller than the original image
+	//However, we know a standard png image usually up to 3 bytes per pixel, which means our product image can have more bytes in size even it looks smaller in width and height
+	//new update here is that, we dont actually need a extra row and column to store the x,
+	//just add one more pixel is enough and the worst case is still the same, which the share.length + 1 is a prime number,
+	//then our product image is then in share.length +1 in width and 1 in height 
 	byte[] drawImage(byte[] share) {
 //		byte[] trier = { 5, 6, 7, 18 };
 //		share = trier;
@@ -204,41 +211,46 @@ public class ImageResources {
 //		System.out.println("the third one: " + (int) share[2]);
 		System.out.println("the length: " + share.length);
 		int[] roots = new int[2];
-		roots = closest_roots(share.length - 1);
-		int x = roots[0] + 1;
-		int y = roots[1] + 1;
+		roots = closest_roots(share.length);
+		int x = roots[0];
+		int y = roots[1];
 //		System.out.println("first root: " + x + " second root: " + y);
 		int i = 0;
 //		int x=30;
 //		int y=30;
-		BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB ); // +1 to save x, I know it
+		BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB); // +1 to save x, I know it
 																					// duplicated the space
 
 		for (int height = 0; height < y; height++) {
 			for (int width = 0; width < x; width++) {
 //				System.out.println("width: "+width+" height: "+height);
-				if (width == 0 || height == 0) {
-					image.setRGB(width, height, (int) share[0]); // we waste the first column and row to store x, can be
-																	// improved latter, lazy now
-				} else {
-					image.setRGB(width, height, (int) share[++i]);
-//					System.out.print("x: "+width+" y: "+height+ " value: "+ image.getRGB(width, height));
-				}
+//				if (width == 0 || height == 0) {
+//					image.setRGB(width, height, (int) share[0]); // we waste the first column and row to store x, can be
+//																	// improved latter, lazy now
+//				} else {
+//					image.setRGB(width, height, (int) share[++i]);
+////					System.out.print("x: "+width+" y: "+height+ " value: "+ image.getRGB(width, height));
+//				}
 
+				// we can actually a single pixel to store x
+				image.setRGB(width, height, (int) share[i++]);
 			}
 		}
 		ByteArrayOutputStream result = new ByteArrayOutputStream();
 		try {
-			ImageIO.write(image, "png", result); //we stick to png as png is a lossless format although the size is big, but is the most suitable for our project to store bytes
+			ImageIO.write(image, "png", result); // we stick to png as png is a lossless format although the size is
+													// big, but is the most suitable for our project to store bytes
 		} catch (IOException e) {
-		
+
 			e.printStackTrace();
 		}
 		return result.toByteArray();
 	}
 
 	// find two closest roots for a given image size
-	// it cannot provide a perfect square always, as we need to find two value that value 1 x value = the length, not always get a good solution, especially for a prime value..
+	// it cannot provide a perfect square always, as we need to find two value that
+	// value 1 x value = the length, not always get a good solution, especially for
+	// a prime value..
 	int[] closest_roots(int length) {
 		int[] results = new int[2];
 		int first_num = (int) Math.ceil(Math.sqrt(length));
