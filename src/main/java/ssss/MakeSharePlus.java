@@ -2,12 +2,11 @@ package ssss;
 
 import finiteField.FiniteField;
 
-
 import java.util.Random;
 
 // ssss over GF(2^n)
 public class MakeSharePlus {
-	
+
 	static final FiniteField finiteField = FiniteField.getInstance();
 	final byte[] secret;
 	final int t;
@@ -36,12 +35,11 @@ public class MakeSharePlus {
 		Random random = new Random();
 		int[] coefficient = new int[t];
 		String[] shares = new String[n];
-		int [] temp=new int[secret.length];
+		int[] temp = new int[secret.length];
 
-		//byte to unsinged int, this is very important, don't remove
-		for(int i=0;i<secret.length;i++)
-		{
-			temp[i]=secret[i]& 0xff;
+		// byte to unsinged int, this is very important, don't remove
+		for (int i = 0; i < secret.length; i++) {
+			temp[i] = secret[i] & 0xff;
 //			System.out.println("temp[i]: "+temp[i]+"secretByte[i]: "+secretByte[i]);
 		}
 		for (int i = 0; i < n; i++) {
@@ -49,7 +47,6 @@ public class MakeSharePlus {
 		}
 
 		for (int k = 0; k < temp.length; k++) {
-
 			int eachByte = temp[k];
 			coefficient[0] = eachByte;
 			for (int i = 1; i < coefficient.length; i++) {
@@ -65,27 +62,25 @@ public class MakeSharePlus {
 		}
 		return shares;
 	}
-	
+
 	public byte[][] constructPointsEX() {
 		Random random = new Random();
 		int[] coefficient = new int[t];
-		byte[][] shares = new byte[n][secret.length+1];//1 for the x
-		int [] temp=new int[secret.length];
+		byte[][] shares = new byte[n][secret.length + 1];// 1 for the x
+		int[] temp = new int[secret.length];
 
-
-		//byte to unsinged int, this is very important, don't remove
-		for(int i=0;i<secret.length;i++)
-		{
-			temp[i]=secret[i]& 0xff;
+		// byte to unsinged int, this is very important, don't remove
+		for (int i = 0; i < secret.length; i++) {
+			temp[i] = secret[i] & 0xff;
 //			System.out.println("temp[i]: "+temp[i]+"secretByte[i]: "+secretByte[i]);
 		}
 		for (int i = 0; i < n; i++) {
-			shares[i][0] = (byte)(i + 1) ;
+			shares[i][0] = (byte) (i + 1);
 		}
 
 		for (int k = 0; k < secret.length; k++) {
 
-			int eachByte = secret[k]& 0xff;
+			int eachByte = secret[k] & 0xff;
 			coefficient[0] = eachByte;
 			for (int i = 1; i < coefficient.length; i++) {
 				coefficient[i] = random.nextInt(limit);
@@ -93,8 +88,7 @@ public class MakeSharePlus {
 //			System.out.println("coefficient of polynomial: " + Arrays.toString(coefficient));
 
 			for (int i = 0; i < shares.length; i++) {
-				shares[i][k+1] = (byte)getYCoord(i + 1, coefficient);
-
+				shares[i][k + 1] = (byte) getYCoord(i + 1, coefficient);
 			}
 		}
 		return shares;
@@ -110,5 +104,5 @@ public class MakeSharePlus {
 		}
 		return result;
 	}
-
+	
 }
