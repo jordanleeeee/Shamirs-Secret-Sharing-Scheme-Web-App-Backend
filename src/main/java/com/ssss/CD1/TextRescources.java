@@ -31,7 +31,7 @@ public class TextRescources {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getShares ( Map<String, Object> map){
 		System.out.println("You are now in text encryption service");
-		System.out.println("map content: "+map);
+//		System.out.println("map content: "+map);
 		
 		
 		// I can input Chinese and special symbols now :)
@@ -43,12 +43,12 @@ public class TextRescources {
 		int n=(int) map.get("totalShare");
 		int t=(int) map.get("threshold");
 		
-		System.out.println("Secret: " + secret+ "\n");
+//		System.out.println("Secret: " + secret+ "\n");
 		byte[] secretByte = secret.getBytes();
 		MakeSharePlus makeSharePlus = new MakeSharePlus(secretByte, t, n, 8);
 		
 		byte[][] shares = makeSharePlus.constructPointsEX();//we dont need to read the share in screen anymore as prof ask us to make it downloadable, so use EX one
-		System.out.println("points(shares): " + Arrays.deepToString(shares) + "\n");
+//		System.out.println("points(shares): " + Arrays.deepToString(shares) + "\n");
 
 		
 		Map<String, Object> result = new HashMap<String,Object>();
@@ -56,7 +56,7 @@ public class TextRescources {
 		{
 			result.put("share"+i,Base64.getEncoder().encodeToString(shares[i]));
 		}
-		System.out.print(result);
+//		System.out.print(result);
 		Response reply = Response.ok(result).build();
 		return reply;
 	}
@@ -69,7 +69,7 @@ public class TextRescources {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getSecret ( Map<String, Object> map,@PathParam("t") int t){
 		System.out.println("You are now in text recovery service");
-		System.out.println("t: "+t+"map content: "+map);
+//		System.out.println("t: "+t+"map content: "+map);
 		String []shares=new String[t];
 		for (int i = 0; i < t; i++)
 		{
@@ -89,11 +89,11 @@ public class TextRescources {
 		RecoverSecretPlus recoverSecretPlus = new RecoverSecretPlus(shares, t,8);
 		
 		String response=new String(recoverSecretPlus.getSecretEX(), StandardCharsets.UTF_8);//use EX one after meeting with prof
-		System.out.println("Recovery Result: " + response);
+//		System.out.println("Recovery Result: " + response);
 		
 		Map<String, Object> result = new HashMap<String,Object>();
 		result.put("secret",response );
-		System.out.print(result);
+//		System.out.print(result);
 		Response reply = Response.ok(result).build();
 		return reply;
 	}
