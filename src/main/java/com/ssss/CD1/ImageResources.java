@@ -123,9 +123,16 @@ public class ImageResources {
 					Base64.getDecoder().decode((String) map.get("share" + i)));
 			BufferedImage receivedImage;
 			try {
+				
 				receivedImage = ImageIO.read(income);
+
 				int height = receivedImage.getHeight();
 				int width = receivedImage.getWidth();
+				int length =height*width;
+				char[] charTemp=new char [length];
+				int k=0;
+
+				shares[i]=String.valueOf(charTemp);
 //
 //				System.out.println("width: " + width + " height: " + height);
 //				System.out.println();
@@ -146,10 +153,12 @@ public class ImageResources {
 ////							System.out.println((int)bufferedImage.getRGB(x, y)+ " ");
 //						}
 						// we can now use only one pixel to store x, no need above line anymore
-						shares[i] += (char) receivedImage.getRGB(x, y);
-
+						charTemp[k++]= (char) receivedImage.getRGB(x, y);
 					}
 				}
+				shares[i]=String.valueOf(charTemp);
+//				System.out.println(shares[i].length());
+//				System.out.println(length);
 
 //				System.out.println(shares[i]);
 
