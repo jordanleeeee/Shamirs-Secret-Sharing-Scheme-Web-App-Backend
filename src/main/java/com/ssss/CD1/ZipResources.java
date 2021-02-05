@@ -99,11 +99,22 @@ public class ZipResources {
 //			System.out.println("temp"+temp.length);
 			
 			//below is necessary as the image may contain null so new String cannot use 
+//			for(int k=0;k<numOfByte;k++)
+//			{
+//				shares[i]+=(char)temp[k];
+//			}
+			
+			//see if this will be quicker
+			char[] charTemp=new char [temp.length];
 			for(int k=0;k<numOfByte;k++)
 			{
-				shares[i]+=(char)temp[k];
+				charTemp[k]=(char)temp[k];
 			}
-//			System.out.println("shares[i]"+shares[i].length());
+			shares[i]=String.valueOf(charTemp);
+//			System.out.println(temp.length);
+//			System.out.println(shares[i].length());
+			
+			
 
 		}
 //		byte[][] charBuffer = new byte[t][((String)map.get("share0" )).length()];
