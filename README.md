@@ -24,3 +24,69 @@
 # Others
 1. I can successfully support text encryption and recovery, even with special symbols
 2. I can successfully support image encryption and recovery, will add it to application frontend later. This need to ask professor as we used different way to do.
+
+# Pseudocode
+
+```
+function encrypt(s, n, t)
+  int[] coefficient
+  int[] shares
+  coefficients[0] = s
+  for i = 1 to t
+    coefficients[i] = randomNum(256)
+  for i = 0 to n
+    shares[i] = F(i, coefficients)
+  return shares
+
+function F(x, coefficients)
+  int result = 1
+  int val = 1
+  for coefficient in coefficients
+    result = result + coefficient* val
+    val = val* x
+  return result
+
+```
+```
+function recover(shares, t)
+  result = 0
+  for i = 0 to t
+    temp = shares[i].y
+    for j = 0 to t
+      if i != j
+        fraction = shares[j].x / (shares[j].x - shares[i].x)
+        temp = temp* fraction
+    result = result + temp
+  return result
+```
+```
+function addOrMinus(a, b):
+  return a ⊕ b
+```
+```
+function multiplication(a, b)
+  result = 0
+  for i=7 down to 0
+    if b[i] = 1
+      result = result ⊕ a
+    if a[0] = 0
+      a = a << 1
+    else
+      a = (a << 1) ⊕ irreduciblePolynomials
+  return result
+```
+```
+function division(a, b)
+  bInverse = power(b, 2^8-2)
+  return multiplication(a, bInverse)
+
+function power(a, idx)
+  result = a
+  for i=0 to idx-1
+    result = multiplication(result, a)
+  return result
+
+// improved division
+function division(a, b)
+  return divisionTable[a][b]
+```
