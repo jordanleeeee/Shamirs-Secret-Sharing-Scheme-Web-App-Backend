@@ -26,7 +26,7 @@
 	  <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
 	  <init-param>
 	    <param-name>cors.allowed.origins</param-name>
-	    <param-value>http://localhost:8080,http://localhost:4200,http://18.162.209.227,http://3.138.141.214,http://www.jordanleeeee.com, http://ssssonline.hopto.org, http://ssssonline.tk, http://ec2-18-162-209-227.ap-east-1.compute.amazonaws.com</param-value>
+	    <param-value>http://localhost:8080,http://localhost:4200,http://18.162.209.227,http://3.138.141.214,http://www.jordanleeeee.com, http://ssssonline.hopto.org,https://ssssonline.tk, http://ssssonline.tk, http://ec2-18-162-209-227.ap-east-1.compute.amazonaws.com</param-value>
 	  </init-param>
 	  <init-param>
 	    <param-name>cors.allowed.methods</param-name>
