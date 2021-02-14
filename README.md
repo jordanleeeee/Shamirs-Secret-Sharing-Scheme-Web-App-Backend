@@ -1,12 +1,12 @@
 # Prerequisites
 1. Java jdk 11 
 2. Eclipse IDE for Java EE Developers
-3. Tomcat 9.0.39 installed in Eclipse correctly
+3. Tomcat 9.0.39
 
 # Environment setting
 1. project -> Properties -> Targeted Runtimes -> Apache Tomcat v9 -> Apply and close (this will add tomcat to our project)
 2. Run (the green button) -> Run Configuration ->common -> Encoding -> Other & choose UTF-8 (support Chinese input in Eclipse)
-3. use your own maven not the one in Eclipse, this will make Eclipse happier (optional)
+
 
 # Run
 1. Maven ->　Update Project Configuration
