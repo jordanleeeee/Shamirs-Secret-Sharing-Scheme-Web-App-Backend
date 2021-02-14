@@ -9,7 +9,7 @@
 
 
 # Run
-1. Maven ->　Update Project Configuration
+1. Maven -> Update Project Configuration
 2. Run as -> maven install (optional)
 3. Run as -> Run on Server
 
