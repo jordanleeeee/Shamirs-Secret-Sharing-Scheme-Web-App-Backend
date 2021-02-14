@@ -1,3 +1,6 @@
+# The frontend repo of this project
+https://github.com/XenonHan/fyp
+
 # Prerequisites
 1. Java jdk 11 
 2. Eclipse IDE for Java EE Developers
