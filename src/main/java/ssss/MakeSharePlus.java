@@ -22,7 +22,7 @@ public class MakeSharePlus {
 	 * @param n_     value of n of GF(2^n)
 	 */
 	public MakeSharePlus(byte[] secret, int t, int n, int n_) {
-		if (t > n) {
+		if (t > n || n < 1) {
 			throw new IllegalStateException("n must be >= t in order to recover the secret");
 		}
 		this.secret = secret;
