@@ -19,6 +19,9 @@ public class RecoverSecretPlus {
 	 * @param n_     value of n of GF(2^n)
 	 */
 	public RecoverSecretPlus(String[] shares, int t, int n_) {
+		if (t < 1) {
+			throw new IllegalStateException();
+		}
 		this.shares = shares;
 		this.t = t;
 		this.n_ = n_;

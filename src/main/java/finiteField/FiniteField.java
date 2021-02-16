@@ -64,13 +64,11 @@ public class FiniteField {
         return binary;
     }
 
-    public int getValue(byte[] a) {
+    private int getValue(byte[] a) {
         String binaryString = "";
         for (byte b : a) {
             binaryString += b;
         }
-//        System.out.println(Arrays.toString(a) + "\t" + binaryString +
-//                "\t" + Integer.parseInt(binaryString, 2));
         return Integer.parseInt(binaryString, 2);
     }
 
