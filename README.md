@@ -21,6 +21,15 @@ https://github.com/XenonHan/fyp
 1. Run our Angular frontend with this backend at the same time
 2. go to localhost8080 and play around
 
+# Generate testing report
+testing only, no report: mvn clean test<br>
+testing report only: mvn clean test site<br>
+coverage report only: mvn clean test jacoco:report<br>
+both report: mvn clean test site jacoco:report<br>
+<br>
+Once you run the above command, you can see the two report:<br>
+\target\site\index.html is the testing report, \target\site\jacoco\index.html is the coverage report
+
 
 # Pseudocode
 
