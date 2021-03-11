@@ -31,7 +31,8 @@ public class MakeSharePlus {
 		this.n_ = n_;
 		this.limit = (int) Math.pow(2, n_);
 	}
-
+	
+	@Deprecated
 	public String[] constructPoints() {
 		Random random = new Random();
 		int[] coefficient = new int[t];

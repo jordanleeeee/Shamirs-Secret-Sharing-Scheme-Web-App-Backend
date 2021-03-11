@@ -7,6 +7,19 @@ import java.util.Random;
 
 public class MakeShareTest {
 	
+	private String[] shareParser(byte[][] shares) {
+		String[] result = new String[shares.length];
+		for(int i=0; i<shares.length; i++) {
+			byte[] share = shares[i];
+			char[] charTemp=new char [share.length];
+			for(int j=0; j<share.length; j++) {
+				charTemp[j] = (char)share[j];
+			}
+			result[i] = String.valueOf(charTemp);
+		}
+		return result;
+	}
+	
 	private byte[] generateRandomSecret(int size) {
 		Random random = new Random();
 		int randSecretSize = random.nextInt(size);
@@ -22,53 +35,61 @@ public class MakeShareTest {
 		byte[] secret = generateRandomSecret(10);
 		// generate random shares with t=3, n=5
 		MakeSharePlus testSecret = new MakeSharePlus(secret, 3, 5, 8);
-		String[] testShares = testSecret.constructPoints();
+		byte[][] testShares = testSecret.constructPointsEX();
 		assertEquals(testShares.length, 5);
 		
 		// try recover share from three random shares
-		String[] shares = new String[] {testShares[0], testShares[4], testShares[3]};
-		RecoverSecretPlus testRecover = new RecoverSecretPlus(shares, 3, 8);
-		byte[] originalSecret = testRecover.getSecret();
+		String[] shares = shareParser(testShares);
+		String[] inputShare = new String[] {shares[0], shares[4], shares[3]};
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3, 8);
+		byte[] originalSecret = testRecover.getSecretEX();
 		assertArrayEquals(secret, originalSecret);
 	}
+	
 	@Test
 	public void secretMatchRecoveredSecretTest2() {
 		byte[] secret = generateRandomSecret(100);
 		// generate random shares with t=3, n=5
 		MakeSharePlus testSecret = new MakeSharePlus(secret, 3, 5, 8);
-		String[] testShares = testSecret.constructPoints();
+		byte[][] testShares = testSecret.constructPointsEX();
 		assertEquals(testShares.length, 5);
 		
 		// try recover share from three random shares
-		String[] shares = new String[] {testShares[0], testShares[1], testShares[2]};
-		RecoverSecretPlus testRecover = new RecoverSecretPlus(shares, 3, 8);
-		byte[] originalSecret = testRecover.getSecret();
+		String[] shares = shareParser(testShares);
+		String[] inputShare = new String[] {shares[0], shares[1], shares[2]};
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3, 8);
+		byte[] originalSecret = testRecover.getSecretEX();
 		assertArrayEquals(secret, originalSecret);
 	}
+	
 	@Test
 	public void secretMatchRecoveredSecretTest3() {
 		byte[] secret = generateRandomSecret(1000);
 		// generate random shares with t=15, n=20
 		MakeSharePlus testSecret = new MakeSharePlus(secret, 15, 20, 8);
-		String[] testShares = testSecret.constructPoints();
+		byte[][] testShares = testSecret.constructPointsEX();
 		assertEquals(testShares.length, 20);
 		
 		// try recover share from all shares
-		RecoverSecretPlus testRecover = new RecoverSecretPlus(testShares, 15, 8);
-		byte[] originalSecret = testRecover.getSecret();
+		String[] shares = shareParser(testShares);
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(shares, 15, 8);
+		byte[] originalSecret = testRecover.getSecretEX();
 		assertArrayEquals(secret, originalSecret);
 	}
+	
 	@Test
 	public void secretMatchRecoveredSecretTest4() {
 		byte[] secret = generateRandomSecret(10000);
 		// generate random shares with t=2, n=3
 		MakeSharePlus testSecret = new MakeSharePlus(secret, 2, 3, 8);
-		String[] testShares = testSecret.constructPoints();
+		byte[][] testShares = testSecret.constructPointsEX();
 		assertEquals(testShares.length, 3);
 		
-		String[] shares = new String[] {testShares[1], testShares[0]};
-		RecoverSecretPlus testRecover = new RecoverSecretPlus(shares, 2, 8);
-		byte[] originalSecret = testRecover.getSecret();
+		// try recover share from all shares
+		String[] shares = shareParser(testShares);
+		String[] inputShare = new String[] {shares[1], shares[0]};
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 2, 8);
+		byte[] originalSecret = testRecover.getSecretEX();
 		assertArrayEquals(secret, originalSecret);
 	}
 	
@@ -77,13 +98,15 @@ public class MakeShareTest {
 		byte[] secret = generateRandomSecret(10);
 		// generate random shares with t=3, n=5
 		MakeSharePlus testSecret = new MakeSharePlus(secret, 3, 5, 8);
-		String[] testShares = testSecret.constructPoints();
+		byte[][] testShares = testSecret.constructPointsEX();
 		
 		// try recover share from two duplicate valid share and one valid share
-		testShares[0] = testShares[1];
-		String[] shares = new String[] {testShares[0], testShares[1], testShares[2]};
-		RecoverSecretPlus testRecover = new RecoverSecretPlus(shares, 3, 8);
-		byte[] originalSecret = testRecover.getSecret();
+		
+		String[] shares = shareParser(testShares);
+		shares[0] = shares[1];
+		String[] inputShare = new String[] {shares[0], shares[1], shares[2]};
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3, 8);
+		byte[] originalSecret = testRecover.getSecretEX();
 		assertArrayEquals(secret, originalSecret);
 	}
 	

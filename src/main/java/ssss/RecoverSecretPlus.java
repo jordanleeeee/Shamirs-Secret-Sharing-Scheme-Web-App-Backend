@@ -1,8 +1,5 @@
 package ssss;
 
-
-
-
 import finiteField.FiniteField;
 
 public class RecoverSecretPlus {
@@ -30,6 +27,7 @@ public class RecoverSecretPlus {
 
 	// refer to formula
 	// https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing#Computationally_efficient_approach
+	@Deprecated
 	public byte[] getSecret() {
 		if (shares.length < t) {
 			throw new IllegalStateException("not enough share to recover the secret");

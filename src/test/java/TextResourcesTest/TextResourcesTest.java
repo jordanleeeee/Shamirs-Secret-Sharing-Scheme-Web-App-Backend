@@ -2,7 +2,6 @@ package TextResourcesTest;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -10,11 +9,10 @@ import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import com.ssss.CD1.TextRescources;
-import com.ssss.CD1.ZipResources;
+
 
 public class TextResourcesTest {
 	
@@ -38,8 +36,8 @@ public class TextResourcesTest {
 	public void testuploadtextfilefail_getShares() {
 		Map<String, Object> inputobject = null;
 		TextRescources test = new TextRescources();
-		Response returnresponse = null;
-		returnresponse = test.getShares(inputobject);
+		Response returnResponse = null;
+		returnResponse = test.getShares(inputobject);
 		
 	}
 	
@@ -66,7 +64,7 @@ public class TextResourcesTest {
 		assertEquals(number_of_share,n);
 	}
 	
-	//test the sucessful upload
+	//test the successful upload
 		@Test
 		public void checkresutnresponsesize_recovery() throws IOException {
 			Map<String, Object> inputobject = new HashMap<String, Object>();
