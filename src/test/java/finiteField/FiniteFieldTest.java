@@ -45,7 +45,7 @@ public class FiniteFieldTest{
             String url = String.format("http://www.ee.unb.ca/cgi-bin/tervo/calc2.pl?num=%d&den=%d&f=%s&p=36", a, b, f);
             Connection web = Jsoup.connect(url);
             Document htmlDoc = Jsoup.parse(web.get().html());
-            // get get calculation result from htmlparser provided by Jsoup
+            // get calculation result from htmlparser provided by Jsoup
             if (operator == '/') {
                 Elements elements = htmlDoc.select("div > table > tbody > tr > td").select(".tdr");
                 ans = Integer.parseInt(elements.first().html());
