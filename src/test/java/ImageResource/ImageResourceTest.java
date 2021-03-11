@@ -2,29 +2,19 @@ package ImageResource;
 
 import static org.junit.Assert.assertEquals;
 
-
-import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.ProtocolException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.StreamingOutput;
 
-import org.apache.commons.io.IOUtils;
-import org.junit.Before;
 import org.junit.Test;
 
-
 import com.ssss.CD1.ImageResources;
-
-import ssss.MakeSharePlus;
 
 public class ImageResourceTest {
 	

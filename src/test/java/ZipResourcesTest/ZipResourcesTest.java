@@ -12,7 +12,6 @@ import java.util.Map;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
 import com.ssss.CD1.ZipResources;
