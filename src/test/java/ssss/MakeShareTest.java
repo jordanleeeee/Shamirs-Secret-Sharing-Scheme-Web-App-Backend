@@ -31,7 +31,7 @@ public class MakeShareTest {
 	}
 	
 	@Test
-	public void secretMatchRecoveredSecretTest1() {
+	public void secretMatchWithRecoveredSecretTest1() {
 		byte[] secret = generateRandomSecret(10);
 		// generate random shares with t=3, n=5
 		MakeSharePlus testSecret = new MakeSharePlus(secret, 3, 5, 8);
@@ -47,7 +47,7 @@ public class MakeShareTest {
 	}
 	
 	@Test
-	public void secretMatchRecoveredSecretTest2() {
+	public void secretMatchWithRecoveredSecretTest2() {
 		byte[] secret = generateRandomSecret(100);
 		// generate random shares with t=3, n=5
 		MakeSharePlus testSecret = new MakeSharePlus(secret, 3, 5, 8);
@@ -63,7 +63,7 @@ public class MakeShareTest {
 	}
 	
 	@Test
-	public void secretMatchRecoveredSecretTest3() {
+	public void secretMatchWithRecoveredSecretTest3() {
 		byte[] secret = generateRandomSecret(1000);
 		// generate random shares with t=15, n=20
 		MakeSharePlus testSecret = new MakeSharePlus(secret, 15, 20, 8);
@@ -78,7 +78,7 @@ public class MakeShareTest {
 	}
 	
 	@Test
-	public void secretMatchRecoveredSecretTest4() {
+	public void secretMatchWithRecoveredSecretTest4() {
 		byte[] secret = generateRandomSecret(10000);
 		// generate random shares with t=2, n=3
 		MakeSharePlus testSecret = new MakeSharePlus(secret, 2, 3, 8);
@@ -94,7 +94,7 @@ public class MakeShareTest {
 	}
 	
 	@Test(expected = AssertionError.class)
-	public void secretSecretFailTest1() {
+	public void duplicatedShareRecoveryFailTest() {
 		byte[] secret = generateRandomSecret(10);
 		// generate random shares with t=3, n=5
 		MakeSharePlus testSecret = new MakeSharePlus(secret, 3, 5, 8);
@@ -104,6 +104,21 @@ public class MakeShareTest {
 		
 		String[] shares = shareParser(testShares);
 		shares[0] = shares[1];
+		String[] inputShare = new String[] {shares[0], shares[1], shares[2]};
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3, 8);
+		byte[] originalSecret = testRecover.getSecretEX();
+		assertArrayEquals(secret, originalSecret);
+	}
+	
+	@Test(expected = AssertionError.class)
+	public void insufficientShareRecoveryFailTest() {
+		byte[] secret = generateRandomSecret(10);
+		// generate random shares with t=3, n=5
+		MakeSharePlus testSecret = new MakeSharePlus(secret, 4, 5, 8);
+		byte[][] testShares = testSecret.constructPointsEX();
+		
+		// try recover share from in sufficient share
+		String[] shares = shareParser(testShares);
 		String[] inputShare = new String[] {shares[0], shares[1], shares[2]};
 		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3, 8);
 		byte[] originalSecret = testRecover.getSecretEX();

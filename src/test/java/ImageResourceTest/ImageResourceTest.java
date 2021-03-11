@@ -1,4 +1,4 @@
-package ImageResource;
+package ImageResourceTest;
 
 import static org.junit.Assert.assertEquals;
 
@@ -24,7 +24,7 @@ public class ImageResourceTest {
 	//upload the test image file
 	@Test
 	public void uploadtheimagefile_getShares() throws IOException{
-		InputStream fileInputStream = new FileInputStream("src/test/java/ImageResource/image.png");
+		InputStream fileInputStream = new FileInputStream("src/test/java/ImageResourceTest/image.png");
 		ImageResources imageresource = new ImageResources();
 		Response testresponse = null;
 		testresponse = imageresource.getShares(fileInputStream, t, n);
@@ -43,7 +43,7 @@ public class ImageResourceTest {
 	//test the response
 	@Test
 	public void checkreturnresponsenumber_getShares() throws IOException {
-		FileInputStream fileInputStream = new FileInputStream("src/test/java/ImageResource/image.png");
+		FileInputStream fileInputStream = new FileInputStream("src/test/java/ImageResourceTest/image.png");
 		ImageResources imageresource = new ImageResources();
 		Response testresponse = null;
 		testresponse = imageresource.getShares(fileInputStream, t, n);
