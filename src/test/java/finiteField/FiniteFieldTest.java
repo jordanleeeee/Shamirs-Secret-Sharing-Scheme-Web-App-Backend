@@ -33,9 +33,19 @@ public class FiniteFieldTest{
                 case '/': f = 'd'; break;
                 default: throw new IllegalStateException();
             }
+            /*
+             * the query parameter of http://www.ee.unb.ca/cgi-bin/tervo/calc2.pl:
+             * 		num, den is two integer
+             * 		f specify the type of calculator:
+             * 			a = add; s = subtract; m = multiply; d = divide
+             * 		p specify the incredible polynomial, in our project it is 100011011 : P[x] = x^8+x^4+x^3+x+1
+             * 		and p=36 will set the incredible polynomial = x^8+x^4+x^3+x+1
+             */
+            
             String url = String.format("http://www.ee.unb.ca/cgi-bin/tervo/calc2.pl?num=%d&den=%d&f=%s&p=36", a, b, f);
             Connection web = Jsoup.connect(url);
             Document htmlDoc = Jsoup.parse(web.get().html());
+            // get get calculation result from htmlparser provided by Jsoup
             if (operator == '/') {
                 Elements elements = htmlDoc.select("div > table > tbody > tr > td").select(".tdr");
                 ans = Integer.parseInt(elements.first().html());
