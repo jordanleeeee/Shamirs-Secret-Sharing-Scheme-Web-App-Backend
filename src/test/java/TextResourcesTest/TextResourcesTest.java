@@ -82,7 +82,7 @@ public class TextResourcesTest {
 			Map<String, Object> returnresponse = (Map<String, Object>) testresponse_recovery.getEntity();
 			System.out.println("the size of original file: " + secretByte.toString().length());
 			System.out.println("the return size: " + returnresponse.get("secret").toString().length());
-			assertEquals(secretByte.toString().length(),returnresponse.get("secret").toString().length());
+			assertEquals(secretByte.toString(),returnresponse.get("secret").toString());
 			
 		}
 }
