@@ -1,5 +1,5 @@
 # The frontend repo of this project
-https://github.com/XenonHan/fyp
+https://github.com/XenonHan/Shamirs-Secret-Sharing-Scheme-Web-App
 
 # Prerequisites
 1. Java jdk 11 
