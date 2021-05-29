@@ -41,7 +41,7 @@ public class MakeShareTest {
 		// try recover share from three random shares
 		String[] shares = shareParser(testShares);
 		String[] inputShare = new String[] {shares[0], shares[4], shares[3]};
-		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3, 8);
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3);
 		byte[] originalSecret = testRecover.getSecretEX();
 		assertArrayEquals(secret, originalSecret);
 	}
@@ -57,7 +57,7 @@ public class MakeShareTest {
 		// try recover share from three random shares
 		String[] shares = shareParser(testShares);
 		String[] inputShare = new String[] {shares[0], shares[1], shares[2]};
-		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3, 8);
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3);
 		byte[] originalSecret = testRecover.getSecretEX();
 		assertArrayEquals(secret, originalSecret);
 	}
@@ -72,7 +72,7 @@ public class MakeShareTest {
 		
 		// try recover share from all shares
 		String[] shares = shareParser(testShares);
-		RecoverSecretPlus testRecover = new RecoverSecretPlus(shares, 15, 8);
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(shares, 15);
 		byte[] originalSecret = testRecover.getSecretEX();
 		assertArrayEquals(secret, originalSecret);
 	}
@@ -88,7 +88,7 @@ public class MakeShareTest {
 		// try recover share from all shares
 		String[] shares = shareParser(testShares);
 		String[] inputShare = new String[] {shares[1], shares[0]};
-		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 2, 8);
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 2);
 		byte[] originalSecret = testRecover.getSecretEX();
 		assertArrayEquals(secret, originalSecret);
 	}
@@ -105,7 +105,7 @@ public class MakeShareTest {
 		String[] shares = shareParser(testShares);
 		shares[0] = shares[1];
 		String[] inputShare = new String[] {shares[0], shares[1], shares[2]};
-		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3, 8);
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3);
 		byte[] originalSecret = testRecover.getSecretEX();
 		assertArrayEquals(secret, originalSecret);
 	}
@@ -120,7 +120,7 @@ public class MakeShareTest {
 		// try recover share from in sufficient share
 		String[] shares = shareParser(testShares);
 		String[] inputShare = new String[] {shares[0], shares[1], shares[2]};
-		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3, 8);
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(inputShare, 3);
 		byte[] originalSecret = testRecover.getSecretEX();
 		assertArrayEquals(secret, originalSecret);
 	}
@@ -138,6 +138,6 @@ public class MakeShareTest {
 	@Test(expected = IllegalStateException.class)
 	public void invalidUsageTest3() {
 		String[] randomShares = new String[]{"hello", "world", "!!"};
-		RecoverSecretPlus testRecover = new RecoverSecretPlus(randomShares, 0, 8);
+		RecoverSecretPlus testRecover = new RecoverSecretPlus(randomShares, 0);
 	}
 }

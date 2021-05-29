@@ -21,12 +21,12 @@ public class FiniteField {
         return instance;
     }
 
-    private FiniteField(){
+    private FiniteField() {
         int numElement = (int) Math.pow(p, n);
         for (int i = 0; i < numElement; i++) {
             for (int j = 0; j < numElement; j++) {
-                multiplicationTable[i][j] = getValue(multiply(toBinary(i, n), toBinary(j, n), n));
-                divisionTable[i][j] = getValue(divide(toBinary(i, n), toBinary(j, n), n));
+                multiplicationTable[i][j] = getValue(multiply(toBinary(i), toBinary(j), n));
+                divisionTable[i][j] = getValue(divide(toBinary(i), toBinary(j), n));
             }
         }
     }
@@ -51,14 +51,14 @@ public class FiniteField {
         return result;
     }
 
-    private byte[] toBinary(int a, int n) {
+    private byte[] toBinary(int a) {
         String binaryString = Integer.toBinaryString(a);
-        if (binaryString.length() > n) {
+        if (binaryString.length() > FiniteField.n) {
             throw new IllegalStateException("overflow occur");
         }
 
-        byte[] binary = new byte[n];
-        for (int i = binaryString.length() - 1, j = n - 1; i >= 0; i--, j--) {
+        byte[] binary = new byte[FiniteField.n];
+        for (int i = binaryString.length() - 1, j = FiniteField.n - 1; i >= 0; i--, j--) {
             binary[j] = (byte) (binaryString.charAt(i) - '0');
         }
         return binary;
@@ -124,7 +124,7 @@ public class FiniteField {
             throw new IllegalStateException();
         }
         // recall that a / b == a * inverseOf(b)
-        // from wiki: the inverse of x is x^(p^n − 2). idk why, don't ask me
+        // from wiki: the inverse of x is x^(p^n − 2).
         byte[] inverse = power(b, (int) (Math.pow(2, n) - 2), n);
         return multiply(a, inverse, n);
     }

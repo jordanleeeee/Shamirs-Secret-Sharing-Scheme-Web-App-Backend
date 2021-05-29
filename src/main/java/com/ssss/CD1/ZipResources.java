@@ -25,120 +25,54 @@ import ssss.RecoverSecretPlus;
 @PermitAll
 public class ZipResources {
 
-	@POST
-	@Path("/encryption/{n}/{t}")
-	@Consumes({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
-	@Produces({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
-	public Response getShares(@FormDataParam("image") InputStream fileInputStream, @PathParam("t") int t,
-			@PathParam("n") int n) {
+    @POST
+    @Path("/encryption/{n}/{t}")
+    @Consumes({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
+    @Produces({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
+    public Response getShares(@FormDataParam("image") InputStream fileInputStream, @PathParam("t") int t,
+                              @PathParam("n") int n) {
+        try {
+            System.out.println("You are now in Zip encryption service");
+            byte[] secretByte = IOUtils.toByteArray(fileInputStream);
+            MakeSharePlus makeSharePlus = new MakeSharePlus(secretByte, t, n, 8);
 
-		try {
-			System.out.println("You are now in Zip encryption service");
-			byte[] secretByte = IOUtils.toByteArray(fileInputStream);
+            byte[][] shares = makeSharePlus.constructPointsEX();
+            Map<String, Object> result = new HashMap<>();
+            for (int i = 0; i < n; i++) {
+                result.put("share" + i, Base64.getEncoder().encodeToString(shares[i]));
+            }
+            return Response.ok(result).build();
 
-//		byte[] secretByte = Arrays.copyOfRange(temp, 0, temp.length - 1);
-//			System.out.println("secret: "+Arrays.toString(secretByte));
-			MakeSharePlus makeSharePlus = new MakeSharePlus(secretByte, t, n, 8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-//			String[] shares = makeSharePlus.constructPoints();
+    @POST
+    @Path("/recovery/{t}")
+    @Consumes({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSecret(@PathParam("t") int t, Map<String, Object> map) {
+        System.out.println("\n\nYou are now in Zip recovery service");
+        String[] shares = new String[t];
+        int numOfByte = Base64.getDecoder().decode((String) map.get("share" + 0)).length;
+        for (int i = 0; i < t; i++) {
+            shares[i] = "";
+            byte[] temp = Base64.getDecoder().decode((String) map.get("share" + i));
+            char[] charTemp = new char[temp.length];
+            for (int k = 0; k < numOfByte; k++) {
+                charTemp[k] = (char) temp[k];
+            }
+            shares[i] = String.valueOf(charTemp);
+        }
 
-			byte[][] shares = makeSharePlus.constructPointsEX();
-//			System.out.println("points(shares): " + Arrays.deepToString(shares) + "\n");
+        RecoverSecretPlus recoverSecretPlus = new RecoverSecretPlus(shares, t);
+        byte[] response = recoverSecretPlus.getSecretEX();
 
-//			// this is temporary only, because I am lazy and want to test only, you should add another function is SSSS to do this, not here. But leave to later/but still O(n) anyway.   
-//			int numOfByte = shares[0].split("-").length;
-//			byte[][] secretEncrypt = new byte[n][numOfByte ];// 1st is not share
-//			String[][] sharePerByte = new String[n][numOfByte];
-//			for (int i = 0; i < n; i++) {
-//				sharePerByte[i] = shares[i].split("-");
-//				System.out.println( Arrays.deepToString(sharePerByte[i]));
-//			}
-//			
-//			for (int k = 0; k < numOfByte; k++) {
-//				for (int i = 0; i < n; i++) {
-//					secretEncrypt[i][k] = (byte)(Integer.parseInt(sharePerByte[i][k]));
-//				}
-//			}
-
-			Map<String, Object> result = new HashMap<String, Object>();
-			for (int i = 0; i < n; i++) {
-//				System.out.println(shares[i]);
-				result.put("share" + i, Base64.getEncoder().encodeToString(shares[i]));
-//				result.put("share" + i, shares[i]);
-			}
-//			System.out.print(result);
-			Response reply = Response.ok(result).build();
-			return reply;
-
-		} catch (IOException e) {
-
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
-	@POST
-	@Path("/recovery/{t}")
-	@Consumes({ MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON })
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getSecret(@PathParam("t") int t, Map<String, Object> map) {
-		System.out.println("\n\nYou are now in Zip recovery service");
-//		System.out.println("t: " + t + "map content: " + map);
-		String[] shares = new String[t];
-		int numOfByte=Base64.getDecoder().decode((String) map.get("share" + 0)).length;
-		for (int i = 0; i < t; i++)
-		{
-			shares[i]="";
-			byte []temp = Base64.getDecoder().decode((String) map.get("share" + i));
-//			System.out.println("temp"+temp.length);
-			
-			//below is necessary as the image may contain null so new String cannot use 
-//			for(int k=0;k<numOfByte;k++)
-//			{
-//				shares[i]+=(char)temp[k];
-//			}
-			
-			//see if this will be quicker
-			char[] charTemp=new char [temp.length];
-			for(int k=0;k<numOfByte;k++)
-			{
-				charTemp[k]=(char)temp[k];
-			}
-			shares[i]=String.valueOf(charTemp);
-//			System.out.println(temp.length);
-//			System.out.println(shares[i].length());
-			
-			
-
-		}
-//		byte[][] charBuffer = new byte[t][((String)map.get("share0" )).length()];
-
-//		for (int i = 0; i < t; i++) {
-////			shares[i] = (String) map.get("share" + i);
-//			
-//			
-//			// this is temporary only, because I am lazy and want to test only, you should add another function is SSSS to do this, not here. But leave to later/but still O(n) anyway. 
-//			charBuffer[i]=Base64.getDecoder().decode((String) map.get("share" + i));
-//			shares[i]="";
-//			for(int k=0;k<charBuffer[0].length;k++)
-//			{
-//				shares[i]+=(((int)charBuffer[i][k])&0xff)+"-";
-//			}
-//			System.out.print(shares[i]);
-//	
-//		}
-
-		RecoverSecretPlus recoverSecretPlus = new RecoverSecretPlus(shares, t, 8);
-
-		byte[] response = recoverSecretPlus.getSecretEX();
-//		System.out.println("Recovery Result: " + response);
-
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("secret", response);
-//		System.out.print(result);
-		Response reply = Response.ok(result).build();
-		return reply;
-	}
+        Map<String, Object> result = new HashMap<>();
+        result.put("secret", response);
+        return Response.ok(result).build();
+    }
 
 }

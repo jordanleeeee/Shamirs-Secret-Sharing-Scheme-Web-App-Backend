@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 
-import com.ssss.CD1.TextRescources;
+import com.ssss.CD1.TextResources;
 
 
 public class TextResourcesTest {
@@ -26,7 +26,7 @@ public class TextResourcesTest {
 		inputobject.put("totalShare",n);
 		inputobject.put("threshold" ,t);
 		
-		TextRescources test = new TextRescources();
+		TextResources test = new TextResources();
 		Response returnresponse = null;
 		returnresponse = test.getShares(inputobject);
 		assert returnresponse != null;
@@ -35,7 +35,7 @@ public class TextResourcesTest {
 	@Test(expected = NullPointerException.class)
 	public void testuploadtextfilefail_getShares() {
 		Map<String, Object> inputobject = null;
-		TextRescources test = new TextRescources();
+		TextResources test = new TextResources();
 		Response returnResponse = null;
 		returnResponse = test.getShares(inputobject);
 		
@@ -47,7 +47,7 @@ public class TextResourcesTest {
 		inputobject.put("secret", "testing");
 		inputobject.put("totalShare",n);
 		inputobject.put("threshold" ,t);
-		TextRescources test = new TextRescources();
+		TextResources test = new TextResources();
 		Response returnresponse = null;
 		returnresponse = test.getShares(inputobject);
 		int number_of_share = 0;
@@ -72,7 +72,7 @@ public class TextResourcesTest {
 			inputobject.put("secret", secretByte);
 			inputobject.put("totalShare",t);
 			inputobject.put("threshold" ,t);
-			TextRescources test = new TextRescources();
+			TextResources test = new TextResources();
 			Response returnresponse_encryption = null;
 			returnresponse_encryption = test.getShares(inputobject);
 			Map<String, Object> messageEntity = (Map<String, Object>) returnresponse_encryption.getEntity();
